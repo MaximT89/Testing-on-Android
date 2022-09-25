@@ -6,19 +6,24 @@ import com.secondworld.buenas.testingonandroid.databinding.FragmentQuestionsBind
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class QuestionsFragment : BaseFragment<FragmentQuestionsBinding, QuestionsViewModel>(FragmentQuestionsBinding::inflate) {
+class QuestionsFragment :
+    BaseFragment<FragmentQuestionsBinding, QuestionsViewModel>(FragmentQuestionsBinding::inflate) {
 
     override val viewModel: QuestionsViewModel by viewModels()
 
     override fun initView() {
+        customBackPressed(
+            needCheck = true,
+            successBack = {
 
+            },
+            cancelBack = {
+
+            }
+        )
     }
 
-    override fun initObservers() {
-        TODO("Not yet implemented")
-    }
+    override fun initObservers() {}
 
-    override fun navigationArrowBack() {
-        TODO("Not yet implemented")
-    }
+    override fun title() = viewModel.title()
 }

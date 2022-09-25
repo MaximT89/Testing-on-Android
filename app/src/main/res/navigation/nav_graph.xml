@@ -18,5 +18,9 @@
         android:id="@+id/questionsFragment"
         android:name="com.secondworld.buenas.testingonandroid.ui.screens.questions.QuestionsFragment"
         android:label="fragment_questions"
-        tools:layout="@layout/fragment_questions" />
+        tools:layout="@layout/fragment_questions" >
+        <action
+            android:id="@+id/action_questionsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
 </navigation>

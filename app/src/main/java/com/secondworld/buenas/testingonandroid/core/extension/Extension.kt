@@ -33,6 +33,10 @@ fun View.show() {
     visibility = View.VISIBLE
 }
 
+fun View.click(logic : () -> Unit) {
+    setOnClickListener { logic.invoke() }
+}
+
 fun View.hide() {
     visibility = View.GONE
 }
@@ -221,4 +225,3 @@ fun SwipeRefreshLayout.isRefreshingFalse() {
 fun SwipeRefreshLayout.isRefreshingTrue() {
     isRefreshing = true
 }
-

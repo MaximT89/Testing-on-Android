@@ -5,15 +5,22 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
+import com.secondworld.buenas.testingonandroid.R
+import com.secondworld.buenas.testingonandroid.core.extension.log
+import com.secondworld.buenas.testingonandroid.core.navigation.BackNavigationUi
 import com.secondworld.buenas.testingonandroid.core.navigation.Navigator
 import java.lang.IllegalArgumentException
 import kotlin.reflect.full.isSubclassOf
@@ -21,7 +28,7 @@ import kotlin.reflect.full.isSubclassOf
 typealias Inflate<T> = (LayoutInflater, ViewGroup?, Boolean) -> T
 
 abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate: Inflate<B>) :
-    Fragment(), Navigator {
+    Fragment(), Navigator, BackNavigationUi {
 
     private var _viewBinding: B? = null
     protected val binding get() = checkNotNull(_viewBinding)
@@ -40,12 +47,73 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        toolbar = activity?.findViewById(R.id.toolbar)
+        toolbar?.title = title()
+
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(showBack())
+
+        toolbar?.setNavigationOnClickListener { requireActivity().onBackPressed() }
+
         initView()
         listenerBundleArguments()
         initObservers()
-        navigationArrowBack()
         initCallbacks()
     }
+
+    open fun customBackPressed(
+        needCheck: Boolean = false,
+        successBack: () -> Unit = {},
+        cancelBack: () -> Unit = {}
+    ) {
+        requireActivity()
+            .onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (needCheck) {
+                        alertDialog(
+                            positive = {
+                                log("positive")
+                                if (isEnabled) {
+                                    isEnabled = false
+                                    requireActivity().onBackPressed()
+                                    successBack.invoke()
+                                }
+                            },
+                            negative = {
+                                log("negative")
+                                cancelBack.invoke()
+                            })
+                    } else {
+                        if (isEnabled) {
+                            isEnabled = false
+                            requireActivity().onBackPressed()
+                        }
+                    }
+                }
+            })
+    }
+
+    fun alertDialog(positive: () -> Unit = {}, negative: () -> Unit = {}) {
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setTitle("Предупреждение")
+        builder.setMessage("Вы уверены что хотите закончить тестирование")
+        builder.setPositiveButton("Да") { _, _ -> positive.invoke() }
+        builder.setNegativeButton("Нет") { _, _ -> negative.invoke() }
+        builder.show()
+    }
+
+    /**
+     * На всех экранах отображаем кнопку назад, кроме стартового экрана
+     */
+    override fun showBack(): Boolean {
+        return true
+    }
+
+    /**
+     * На каждом фрагменте обязательно нужно переопределить title, который отображается в actionBar
+     */
+    abstract fun title(): String
 
     inline fun <reified T> readArguments(
         key: String,
@@ -95,7 +163,6 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
 
     abstract fun initView(): Unit?
     abstract fun initObservers()
-    abstract fun navigationArrowBack()
 
     fun showSnackbar(message: String) {
         Snackbar.make(requireActivity(), binding.root, message, Snackbar.LENGTH_LONG).show()
