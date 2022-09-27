@@ -5,12 +5,6 @@ data class Question(
     val question : String,
     val answers : List<String>,
     val rightAnswer : Int,
-    val type : TypeQuestion,
+    val type : QuestionType,
     val score : Int
 )
-
-enum class TypeQuestion(val score : Int){
-    SIMPLE(1),
-    MEDIUM(2),
-    STRONG(3)
-}

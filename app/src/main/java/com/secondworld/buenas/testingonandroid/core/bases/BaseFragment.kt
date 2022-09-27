@@ -1,5 +1,6 @@
 package com.secondworld.buenas.testingonandroid.core.bases
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.secondworld.buenas.testingonandroid.R
 import com.secondworld.buenas.testingonandroid.core.extension.log
 import com.secondworld.buenas.testingonandroid.core.navigation.BackNavigationUi
 import com.secondworld.buenas.testingonandroid.core.navigation.Navigator
+import com.secondworld.buenas.testingonandroid.databinding.CustomAlertDialogBinding
 import java.lang.IllegalArgumentException
 import kotlin.reflect.full.isSubclassOf
 
@@ -64,7 +66,8 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
     open fun customBackPressed(
         needCheck: Boolean = false,
         successBack: () -> Unit = {},
-        cancelBack: () -> Unit = {}
+        cancelBack: () -> Unit = {},
+        title: String = "Предупреждение"
     ) {
         requireActivity()
             .onBackPressedDispatcher
@@ -83,7 +86,7 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
                             negative = {
                                 log("negative")
                                 cancelBack.invoke()
-                            })
+                            }, title)
                     } else {
                         if (isEnabled) {
                             isEnabled = false
@@ -94,13 +97,19 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
             })
     }
 
-    fun alertDialog(positive: () -> Unit = {}, negative: () -> Unit = {}) {
-        val builder = AlertDialog.Builder(requireActivity())
-        builder.setTitle("Предупреждение")
-        builder.setMessage("Вы уверены что хотите закончить тестирование")
-        builder.setPositiveButton("Да") { _, _ -> positive.invoke() }
-        builder.setNegativeButton("Нет") { _, _ -> negative.invoke() }
-        builder.show()
+    @SuppressLint("InflateParams")
+    fun alertDialog(positive: () -> Unit = {}, negative: () -> Unit = {}, title : String) {
+
+        val dialogView = CustomAlertDialogBinding.inflate(LayoutInflater.from(requireActivity()))
+
+        dialogView.title.text = title
+
+        AlertDialog.Builder(requireActivity(), R.style.AlertDialog_Custom).apply {
+            setView(dialogView.root)
+            setPositiveButton("Да") { _, _ -> positive.invoke() }
+            setNegativeButton("Нет") { _, _ -> negative.invoke() }
+            show()
+        }
     }
 
     /**
