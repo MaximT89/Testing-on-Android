@@ -33,7 +33,8 @@ class QuestionsStorage @Inject constructor() {
         Question(18, "Объявление переменной только для чтения" , listOf("val", "var", "void", "this"), 1, JUNIOR, JUNIOR.score),
         Question(19, "Что должно быть обязательно у класса чтобы от него могли наследоваться другие классы" , listOf("Ничего не требуется", "Перед классом - open", "Перед классом - abstract", "Перед классом - data"), 2, JUNIOR, JUNIOR.score),
         Question(20, "Возможно ли создать экземпляр абстрактного класса" , listOf("да", "нет"), 2, JUNIOR, JUNIOR.score),
-        Question(21, "Возможно ли создать экземпляр абстрактного класса" , listOf("да", "нет"), 2, JUNIOR, JUNIOR.score),
+        Question(21, "Возможно ли добавить элементы в такой список\n\n${"val numbers = listOf(1, 2, 3, 4)"}" , listOf("да", "нет"), 2, JUNIOR, JUNIOR.score),
+        Question(21, "" , listOf("да", "нет"), 2, JUNIOR, JUNIOR.score),
 
 
         )
