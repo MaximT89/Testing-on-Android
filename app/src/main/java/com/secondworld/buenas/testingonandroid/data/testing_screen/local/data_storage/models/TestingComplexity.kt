@@ -2,6 +2,6 @@ package com.secondworld.buenas.testingonandroid.data.testing_screen.local.data_s
 
 enum class TestingComplexity(val countQuestions : Int) {
     EASY(40),
-    MEDIUM(80),
-    HARD(120)
+    MEDIUM(60),
+    HARD(80)
 }
