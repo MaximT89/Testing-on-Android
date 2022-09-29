@@ -4,18 +4,112 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
     tools:context=".ui.screens.main_screen.MainFragment">
 
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Выберите сложность"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="16dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupComplexity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            tools:layout_editor_absoluteX="16dp">
+
+            <RadioButton
+                android:id="@+id/btnJunior"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Junior" />
+
+            <RadioButton
+                android:id="@+id/btnMiddle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Middle" />
+
+            <RadioButton
+                android:id="@+id/btnSenior"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Senior" />
+
+        </RadioGroup>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:layout_editor_absoluteX="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Выберите количество вопросов"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="16dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupCountQuestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            tools:layout_editor_absoluteX="16dp">
+
+            <RadioButton
+                android:id="@+id/btnCountQuestion40"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="40 вопросов" />
+
+            <RadioButton
+                android:id="@+id/btnCountQuestion60"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="60 вопросов" />
+
+            <RadioButton
+                android:id="@+id/btnCountQuestion80"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="80 вопросов" />
+
+        </RadioGroup>
+    </LinearLayout>
+
     <Button
-        android:id="@+id/btn_go_next"
+        android:id="@+id/btnStartTesting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="284dp"
-        android:text="go"
+        android:text="Начать тест"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.937" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

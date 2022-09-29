@@ -1,4 +1,4 @@
-package com.secondworld.buenas.testingonandroid.data.local.data_storage
+package com.secondworld.buenas.testingonandroid.data.testing_screen.local.data_storage.models
 
 data class Question(
     val id : Int,

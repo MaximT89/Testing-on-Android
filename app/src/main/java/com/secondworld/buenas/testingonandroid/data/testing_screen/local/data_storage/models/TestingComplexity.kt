@@ -1,4 +1,4 @@
-package com.secondworld.buenas.testingonandroid.data.local.data_storage
+package com.secondworld.buenas.testingonandroid.data.testing_screen.local.data_storage.models
 
 enum class TestingComplexity(val countQuestions : Int) {
     EASY(40),
