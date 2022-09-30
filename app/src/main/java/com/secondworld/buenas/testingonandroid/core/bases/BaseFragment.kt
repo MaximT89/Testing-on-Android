@@ -12,7 +12,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavOptions
@@ -20,7 +19,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.secondworld.buenas.testingonandroid.R
-import com.secondworld.buenas.testingonandroid.core.extension.log
 import com.secondworld.buenas.testingonandroid.core.navigation.BackNavigationUi
 import com.secondworld.buenas.testingonandroid.core.navigation.Navigator
 import com.secondworld.buenas.testingonandroid.databinding.CustomAlertDialogBinding
@@ -67,7 +65,7 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
         needCheck: Boolean = false,
         successBack: () -> Unit = {},
         cancelBack: () -> Unit = {},
-        title: String = "Предупреждение"
+        titleAlert: String = "Предупреждение"
     ) {
         requireActivity()
             .onBackPressedDispatcher
@@ -75,18 +73,18 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
                 override fun handleOnBackPressed() {
                     if (needCheck) {
                         alertDialog(
-                            positive = {
-                                log("positive")
+                            positiveBtnLogic = {
                                 if (isEnabled) {
                                     isEnabled = false
                                     requireActivity().onBackPressed()
                                     successBack.invoke()
                                 }
                             },
-                            negative = {
-                                log("negative")
+                            negativeBtnLogic = {
                                 cancelBack.invoke()
-                            }, title)
+                            },
+                            titleAlert = titleAlert
+                        )
                     } else {
                         if (isEnabled) {
                             isEnabled = false
@@ -98,16 +96,20 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
     }
 
     @SuppressLint("InflateParams")
-    fun alertDialog(positive: () -> Unit = {}, negative: () -> Unit = {}, title : String) {
+    fun alertDialog(
+        positiveBtnLogic: () -> Unit = {},
+        negativeBtnLogic: () -> Unit = {},
+        titleAlert: String
+    ) {
 
         val dialogView = CustomAlertDialogBinding.inflate(LayoutInflater.from(requireActivity()))
 
-        dialogView.title.text = title
+        dialogView.title.text = titleAlert
 
         AlertDialog.Builder(requireActivity(), R.style.AlertDialog_Custom).apply {
             setView(dialogView.root)
-            setPositiveButton("Да") { _, _ -> positive.invoke() }
-            setNegativeButton("Нет") { _, _ -> negative.invoke() }
+            setPositiveButton("Да") { _, _ -> positiveBtnLogic.invoke() }
+            setNegativeButton("Нет") { _, _ -> negativeBtnLogic.invoke() }
             show()
         }
     }
