@@ -11,12 +11,12 @@
         android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/question"
+        android:id="@+id/questionText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="120dp"
-        android:text="Выберите класс в котлин, аналог класса Object"
+        tools:text="Выберите класс в котлин, аналог класса Object"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"

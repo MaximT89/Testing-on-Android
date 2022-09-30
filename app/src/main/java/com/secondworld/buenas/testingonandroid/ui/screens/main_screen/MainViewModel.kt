@@ -20,14 +20,14 @@ class MainViewModel @Inject constructor(
     fun updateQuestionType(questionType : QuestionType) {
         _settingsTesting.value = SettingsTesting(
             questionsType = questionType,
-            countQuestions = _settingsTesting.value!!.countQuestions
+            complexity = _settingsTesting.value!!.complexity
         )
     }
 
     fun updateComplexity(complexity: TestingComplexity) {
         _settingsTesting.value = SettingsTesting(
             questionsType = _settingsTesting.value!!.questionsType,
-            countQuestions = complexity.countQuestions)
+            complexity = complexity)
     }
 
     fun getSettingsTesting() = _settingsTesting.value

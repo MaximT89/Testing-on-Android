@@ -33,6 +33,7 @@ class MainFragment :
 
         radioGroupCountQuestions.setOnCheckedChangeListener { _, i ->
             when(i){
+                R.id.btnCountQuestion5 -> viewModel.updateComplexity(TestingComplexity.TESTING)
                 R.id.btnCountQuestion40 -> viewModel.updateComplexity(TestingComplexity.EASY)
                 R.id.btnCountQuestion60 -> viewModel.updateComplexity(TestingComplexity.MEDIUM)
                 R.id.btnCountQuestion80 -> viewModel.updateComplexity(TestingComplexity.HARD)

@@ -32,6 +32,8 @@
             android:layout_marginTop="16dp"
             tools:layout_editor_absoluteX="16dp">
 
+
+
             <RadioButton
                 android:id="@+id/btnJunior"
                 android:layout_width="match_parent"
@@ -78,6 +80,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             tools:layout_editor_absoluteX="16dp">
+
+            <RadioButton
+                android:id="@+id/btnCountQuestion5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="5 вопросов" />
 
             <RadioButton
                 android:id="@+id/btnCountQuestion40"

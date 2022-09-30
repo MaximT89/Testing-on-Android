@@ -7,6 +7,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SettingsTesting(
-    val questionsType : QuestionType = QuestionType.JUNIOR,
-    val countQuestions : Int = TestingComplexity.EASY.countQuestions
+    val questionsType: QuestionType = QuestionType.JUNIOR,
+    val complexity: TestingComplexity = TestingComplexity.EASY
 ) : Parcelable
