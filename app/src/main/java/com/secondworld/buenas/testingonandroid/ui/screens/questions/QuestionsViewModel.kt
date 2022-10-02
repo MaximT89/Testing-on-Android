@@ -1,7 +1,9 @@
 package com.secondworld.buenas.testingonandroid.ui.screens.questions
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import com.secondworld.buenas.testingonandroid.R
 import com.secondworld.buenas.testingonandroid.core.bases.BaseViewModel
 import com.secondworld.buenas.testingonandroid.core.common.ResourceProvider
@@ -14,12 +16,12 @@ import javax.inject.Inject
 @HiltViewModel
 class QuestionsViewModel @Inject constructor(
     private val resourceProvider: ResourceProvider,
-    private val testingRepository: TestingRepository
+    private val testingRepository: TestingRepository,
 ) : BaseViewModel() {
     override fun title(): String = resourceProvider.string(R.string.title_questions)
 
     private var _currentTestingSettings = MutableLiveData<SettingsTesting>()
-    val currentTestingSettings : LiveData<SettingsTesting> = _currentTestingSettings
+    val currentTestingSettings: LiveData<SettingsTesting> = _currentTestingSettings
 
     private var _currentListQuestions = MutableLiveData<List<Question>>()
     val currentListQuestions: LiveData<List<Question>> = _currentListQuestions
@@ -32,6 +34,9 @@ class QuestionsViewModel @Inject constructor(
 
     private var _currentNumberQuestion = MutableLiveData(1)
     val currentNumberQuestion: LiveData<Int> = _currentNumberQuestion
+
+    private var _currentAnswers = MutableLiveData<List<AnswerUi>>()
+    val currentAnswers: LiveData<List<AnswerUi>> = _currentAnswers
 
     fun saveCurrentTestingSettings(settings: SettingsTesting) {
         _currentTestingSettings.value = settings
@@ -64,6 +69,19 @@ class QuestionsViewModel @Inject constructor(
     }
 
     fun updateCurrentQuestion() {
-        _currentQuestion.value = _currentListQuestions.value!![_currentNumberQuestion.value!!.minus(1)]
+        _currentQuestion.value =
+            _currentListQuestions.value!![_currentNumberQuestion.value!!.minus(1)]
+    }
+
+    fun updateCurrentAnswers(answers: List<String>) {
+        val answersUi: List<AnswerUi> = answers.map { answer -> AnswerUi(answer = answer) }
+        _currentAnswers.value = answersUi
+    }
+
+    fun updateStatusAnswer(numberElement: Int, newStatus: CheckedStatus) {
+        _currentAnswers.value = _currentAnswers.value!!.mapIndexed { index, answerUi ->
+            if (index == numberElement) answerUi.copy(checkedStatus = newStatus)
+            else answerUi.copy(checkedStatus = CheckedStatus.COMMON)
+        }
     }
 }
