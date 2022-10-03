@@ -1,5 +1,6 @@
 package com.secondworld.buenas.testingonandroid.ui.screens.main_screen
 
+import android.widget.RadioButton
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.secondworld.buenas.testingonandroid.R
@@ -15,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainFragment :
     BaseFragment<FragmentMainBinding, MainViewModel>(FragmentMainBinding::inflate) {
 
-    companion object{
+    companion object {
         const val SETTINGS_TESTING = "settings_testing"
     }
 
@@ -24,7 +25,7 @@ class MainFragment :
     override fun initView() = with(binding) {
 
         radioGroupComplexity.setOnCheckedChangeListener { _, i ->
-            when(i){
+            when (i) {
                 R.id.btnJunior -> viewModel.updateQuestionType(QuestionType.JUNIOR)
                 R.id.btnMiddle -> viewModel.updateQuestionType(QuestionType.MIDDLE)
                 R.id.btnSenior -> viewModel.updateQuestionType(QuestionType.SENIOR)
@@ -32,7 +33,7 @@ class MainFragment :
         }
 
         radioGroupCountQuestions.setOnCheckedChangeListener { _, i ->
-            when(i){
+            when (i) {
                 R.id.btnCountQuestion5 -> viewModel.updateComplexity(CountQuestionsType.TESTING)
                 R.id.btnCountQuestion40 -> viewModel.updateComplexity(CountQuestionsType.EASY)
                 R.id.btnCountQuestion60 -> viewModel.updateComplexity(CountQuestionsType.MEDIUM)
@@ -50,20 +51,24 @@ class MainFragment :
         initStartChoiceFromPrefs()
     }
 
-    private fun initStartChoiceFromPrefs()  {
+    private fun initStartChoiceFromPrefs() = with(binding) {
         val setting = viewModel.getSettingsTesting()
-        when(setting!!.questionsType){
-            QuestionType.JUNIOR -> binding.btnJunior.isChecked = true
-            QuestionType.MIDDLE -> binding.btnMiddle.isChecked = true
-            QuestionType.SENIOR -> binding.btnSenior.isChecked = true
+        when (setting!!.questionsType) {
+            QuestionType.JUNIOR -> btnJunior.active()
+            QuestionType.MIDDLE -> btnMiddle.active()
+            QuestionType.SENIOR -> btnSenior.active()
         }
 
-        when(setting.countQuestions){
-            CountQuestionsType.TESTING -> binding.btnCountQuestion5.isChecked = true
-            CountQuestionsType.EASY -> binding.btnCountQuestion40.isChecked = true
-            CountQuestionsType.MEDIUM -> binding.btnCountQuestion60.isChecked = true
-            CountQuestionsType.HARD -> binding.btnCountQuestion80.isChecked = true
+        when (setting.countQuestions) {
+            CountQuestionsType.TESTING -> btnCountQuestion5.active()
+            CountQuestionsType.EASY -> btnCountQuestion40.active()
+            CountQuestionsType.MEDIUM -> btnCountQuestion60.active()
+            CountQuestionsType.HARD -> btnCountQuestion80.active()
         }
+    }
+
+    private fun RadioButton.active() {
+        isChecked = true
     }
 
     override fun showBack(): Boolean = false

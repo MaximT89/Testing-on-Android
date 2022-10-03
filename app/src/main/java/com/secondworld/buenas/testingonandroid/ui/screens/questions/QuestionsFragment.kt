@@ -1,14 +1,11 @@
 package com.secondworld.buenas.testingonandroid.ui.screens.questions
 
-import android.annotation.SuppressLint
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.secondworld.buenas.testingonandroid.core.bases.BaseFragment
 import com.secondworld.buenas.testingonandroid.core.extension.click
-import com.secondworld.buenas.testingonandroid.core.extension.enabled
 import com.secondworld.buenas.testingonandroid.core.extension.log
-import com.secondworld.buenas.testingonandroid.core.extension.notEnabled
 import com.secondworld.buenas.testingonandroid.databinding.FragmentQuestionsBinding
 import com.secondworld.buenas.testingonandroid.domain.main_screen.model.SettingsTesting
 import com.secondworld.buenas.testingonandroid.ui.screens.main_screen.MainFragment
@@ -104,4 +101,3 @@ class QuestionsFragment :
 
     override fun title() = viewModel.title()
 }
-
