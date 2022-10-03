@@ -1,9 +1,7 @@
 package com.secondworld.buenas.testingonandroid.ui.screens.questions
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import com.secondworld.buenas.testingonandroid.R
 import com.secondworld.buenas.testingonandroid.core.bases.BaseViewModel
 import com.secondworld.buenas.testingonandroid.core.common.ResourceProvider
@@ -50,20 +48,20 @@ class QuestionsViewModel @Inject constructor(
     fun fetchQuestionsFromRepo() {
         _currentListQuestions.value = testingRepository.getQuestions(
             _currentTestingSettings.value!!.questionsType,
-            _currentTestingSettings.value!!.complexity
+            _currentTestingSettings.value!!.countQuestions
         )
     }
 
     fun updateQuestionNumberInfo() {
         _currentCountQuestions.value =
-            "Вопрос ${_currentNumberQuestion.value} / ${_currentTestingSettings.value!!.complexity.countQuestions}"
+            "Вопрос ${_currentNumberQuestion.value} / ${_currentTestingSettings.value!!.countQuestions.countQuestions}"
     }
 
     fun nextQuestion() {
 
         val newQuestionNumber = _currentNumberQuestion.value!!.plus(1)
 
-        if (newQuestionNumber <= _currentTestingSettings.value!!.complexity.countQuestions) {
+        if (newQuestionNumber <= _currentTestingSettings.value!!.countQuestions.countQuestions) {
             _currentNumberQuestion.value = newQuestionNumber
 
             updateCurrentQuestion()

@@ -6,7 +6,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.secondworld.buenas.testingonandroid.core.bases.BaseFragment
 import com.secondworld.buenas.testingonandroid.core.extension.click
+import com.secondworld.buenas.testingonandroid.core.extension.enabled
 import com.secondworld.buenas.testingonandroid.core.extension.log
+import com.secondworld.buenas.testingonandroid.core.extension.notEnabled
 import com.secondworld.buenas.testingonandroid.databinding.FragmentQuestionsBinding
 import com.secondworld.buenas.testingonandroid.domain.main_screen.model.SettingsTesting
 import com.secondworld.buenas.testingonandroid.ui.screens.main_screen.MainFragment
@@ -25,27 +27,24 @@ class QuestionsFragment :
         btnNextQuestion.click {
             viewModel.nextQuestion()
             hideBtnAnswerComplete()
+            questionsAdapter.isClickable = true
         }
 
         btnAnswerComplete.click {
             // TODO: нужно сделать логику увеличения счета
             viewModel.checkChoiceUser()
+            questionsAdapter.isClickable = false
         }
 
         recyclerView.adapter = questionsAdapter
 
-        customBackPressed(
-
-            // TODO: нужно сделать логику возврата на экран с настройкой для тестирования
-
-            successBack = {},
-            cancelBack = {}
-        )
+        customBackPressed(needCheck = true)
     }
 
     override fun listenerBundleArguments() {
         readArguments<SettingsTesting>(MainFragment.SETTINGS_TESTING,
             ifExist = { settings ->
+                log("сработало чтение аргументов")
                 viewModel.saveCurrentTestingSettings(settings)
             })
     }
@@ -54,7 +53,6 @@ class QuestionsFragment :
         currentCountQuestions.observe { text -> binding.numberQuestion.text = text }
 
         currentNumberQuestion.observe { updateQuestionNumberInfo() }
-
 
         currentQuestion.observe { question ->
             updateQuestionText(question.question)

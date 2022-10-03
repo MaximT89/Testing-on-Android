@@ -4,4 +4,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_questions">Тестирование</string>
     <string name="title_main">Главная страница</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 </resources>

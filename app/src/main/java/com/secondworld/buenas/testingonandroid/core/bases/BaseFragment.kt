@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.secondworld.buenas.testingonandroid.R
+import com.secondworld.buenas.testingonandroid.core.extension.click
 import com.secondworld.buenas.testingonandroid.core.navigation.BackNavigationUi
 import com.secondworld.buenas.testingonandroid.core.navigation.Navigator
 import com.secondworld.buenas.testingonandroid.databinding.CustomAlertDialogBinding
@@ -65,7 +66,8 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
         needCheck: Boolean = false,
         successBack: () -> Unit = {},
         cancelBack: () -> Unit = {},
-        titleAlert: String = "Предупреждение"
+        titleAlert: String = "Предупреждение",
+        bodyText: String = "Вы точно хотите закончить тестирование?"
     ) {
         requireActivity()
             .onBackPressedDispatcher
@@ -83,7 +85,8 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
                             negativeBtnLogic = {
                                 cancelBack.invoke()
                             },
-                            titleAlert = titleAlert
+                            titleAlert = titleAlert,
+                            bodyText = bodyText
                         )
                     } else {
                         if (isEnabled) {
@@ -99,18 +102,27 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
     fun alertDialog(
         positiveBtnLogic: () -> Unit = {},
         negativeBtnLogic: () -> Unit = {},
-        titleAlert: String
+        titleAlert: String,
+        bodyText: String
     ) {
+        val dialogViewBinding = CustomAlertDialogBinding.inflate(LayoutInflater.from(requireActivity())).apply {
+            title.text = titleAlert
+            body.text = bodyText
+        }
 
-        val dialogView = CustomAlertDialogBinding.inflate(LayoutInflater.from(requireActivity()))
-
-        dialogView.title.text = titleAlert
-
-        AlertDialog.Builder(requireActivity(), R.style.AlertDialog_Custom).apply {
-            setView(dialogView.root)
-            setPositiveButton("Да") { _, _ -> positiveBtnLogic.invoke() }
-            setNegativeButton("Нет") { _, _ -> negativeBtnLogic.invoke() }
+        val dialog = AlertDialog.Builder(requireActivity(), R.style.AlertDialog_Custom).create().apply {
+            setView(dialogViewBinding.root)
             show()
+        }
+
+        dialogViewBinding.btnPositive.click{
+            positiveBtnLogic.invoke()
+            dialog.dismiss()
+        }
+
+        dialogViewBinding.btnNegative.click{
+            negativeBtnLogic.invoke()
+            dialog.dismiss()
         }
     }
 

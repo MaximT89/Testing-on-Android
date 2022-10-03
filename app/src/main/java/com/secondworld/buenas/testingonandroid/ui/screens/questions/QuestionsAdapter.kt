@@ -19,6 +19,8 @@ class QuestionsAdapter : RecyclerView.Adapter<QuestionsAdapter.ViewHolder>() {
             notifyDataSetChanged()
         }
 
+    var isClickable = true
+
     var answerCallback: ((numberAnswer: Int) -> Unit)? = null
 
     inner class ViewHolder(private val binding: HolderQuestionsAdapterBinding) :
@@ -34,7 +36,11 @@ class QuestionsAdapter : RecyclerView.Adapter<QuestionsAdapter.ViewHolder>() {
                 CheckedStatus.WRONG_ANSWER -> binding.root.setBackgroundResource(R.drawable.bg_holder_question_wrong_answer)
             }
 
-            binding.root.click { answerCallback?.invoke(absoluteAdapterPosition) }
+            binding.root.click {
+                if (isClickable) {
+                    answerCallback?.invoke(absoluteAdapterPosition)
+                }
+            }
         }
     }
 
