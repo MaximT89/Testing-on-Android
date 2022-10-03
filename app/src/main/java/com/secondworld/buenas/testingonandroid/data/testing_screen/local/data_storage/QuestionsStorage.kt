@@ -60,8 +60,11 @@ class QuestionsStorage @Inject constructor() {
         Question(37, "Какой модификатор доступа позволяет обращаться к переменной только внутри класса, в котором она была объявлена" , listOf("public", "private", "Такого модификатора нет", "protected"), 2, JUNIOR, JUNIOR.score),
         Question(38, "Какое ключевое слово мгновенно завершает выполнение цикла" , listOf("return", "continue", "break", "loop"), 3, JUNIOR, JUNIOR.score),
         Question(39, "Что выведется в консоль\n\nif (3 % 2 == 1) println(\"Работает\")\n" +
-                "else println(\"Не работает\")" , listOf("Работает", "Не работает", "", ""), 4, JUNIOR, JUNIOR.score),
+                "else println(\"Не работает\")" , listOf("Работает", "Не работает"), 4, JUNIOR, JUNIOR.score),
         Question(40, "Какой оператор мгновенно переводит к следующей итерации цикла" , listOf("break", "continue", "return", "repeat"), 2, JUNIOR, JUNIOR.score),
+
+
+
         )
 }
 

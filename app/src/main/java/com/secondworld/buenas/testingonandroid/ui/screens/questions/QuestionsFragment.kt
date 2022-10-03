@@ -1,6 +1,8 @@
 package com.secondworld.buenas.testingonandroid.ui.screens.questions
 
 import android.annotation.SuppressLint
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.secondworld.buenas.testingonandroid.core.bases.BaseFragment
 import com.secondworld.buenas.testingonandroid.core.extension.click
@@ -18,13 +20,24 @@ class QuestionsFragment :
 
     private val questionsAdapter = QuestionsAdapter()
 
-    override fun initView() = with(binding){
+    override fun initView() = with(binding) {
 
-        btnNextQuestion.click { viewModel.nextQuestion() }
+        btnNextQuestion.click {
+            viewModel.nextQuestion()
+            hideBtnAnswerComplete()
+        }
+
+        btnAnswerComplete.click {
+            // TODO: нужно сделать логику увеличения счета
+            viewModel.checkChoiceUser()
+        }
 
         recyclerView.adapter = questionsAdapter
 
         customBackPressed(
+
+            // TODO: нужно сделать логику возврата на экран с настройкой для тестирования
+
             successBack = {},
             cancelBack = {}
         )
@@ -48,11 +61,16 @@ class QuestionsFragment :
             getCurrentAnswers(question.answers)
         }
 
-        currentAnswers.observe { answers ->  updateQuestionsAdapter(answers)}
+        currentAnswers.observe { answers -> updateQuestionsAdapter(answers) }
 
         currentTestingSettings.observe {
             viewModel.updateQuestionNumberInfo()
             viewModel.fetchQuestionsFromRepo()
+        }
+
+        statusChoiceUser.observe {
+            if (it) viewModel.updateStatusAnswer(CheckedStatus.RIGHT_ANSWER)
+            else viewModel.updateStatusAnswer(CheckedStatus.WRONG_ANSWER)
         }
 
         currentListQuestions.observe { viewModel.updateCurrentQuestion() }
@@ -63,9 +81,10 @@ class QuestionsFragment :
     }
 
     override fun initCallbacks() {
-
         questionsAdapter.answerCallback = { numberElement ->
-            viewModel.updateStatusAnswer(numberElement, CheckedStatus.SELECTED)
+            viewModel.currentChoiceUser(numberElement)
+            viewModel.updateStatusAnswer(CheckedStatus.SELECTED)
+            showBtnAnswerComplete()
         }
     }
 
@@ -75,6 +94,14 @@ class QuestionsFragment :
 
     private fun updateQuestionText(question: String) {
         binding.questionText.text = question
+    }
+
+    private fun hideBtnAnswerComplete() {
+        binding.btnAnswerComplete.isInvisible = true
+    }
+
+    private fun showBtnAnswerComplete() {
+        binding.btnAnswerComplete.isVisible = true
     }
 
     override fun title() = viewModel.title()

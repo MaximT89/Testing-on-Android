@@ -30,8 +30,8 @@ class QuestionsAdapter : RecyclerView.Adapter<QuestionsAdapter.ViewHolder>() {
             when (item.checkedStatus) {
                 CheckedStatus.COMMON -> binding.root.setBackgroundResource(R.drawable.bg_holder_question_clean)
                 CheckedStatus.SELECTED -> binding.root.setBackgroundResource(R.drawable.bg_holder_question)
-                CheckedStatus.RIGHT_ANSWER -> {}
-                CheckedStatus.WRONG_ANSWER -> {}
+                CheckedStatus.RIGHT_ANSWER -> binding.root.setBackgroundResource(R.drawable.bg_holder_question_correct_answer)
+                CheckedStatus.WRONG_ANSWER -> binding.root.setBackgroundResource(R.drawable.bg_holder_question_wrong_answer)
             }
 
             binding.root.click { answerCallback?.invoke(absoluteAdapterPosition) }

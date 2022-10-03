@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -15,14 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="120dp"
-        tools:text="Выберите класс в котлин, аналог класса Object"
+        android:layout_marginTop="40dp"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/numberQuestion"
+        tools:text="Выберите класс в котлин, аналог класса Object Выберите класс в котлин, аналог класса Object Выберите класс в котлин, аналог класса Object Выберите класс в котлин, аналог класса Object Выберите класс в котлин, аналог класса Object Выберите класс в котлин, аналог класса Object " />
 
     <TextView
         android:id="@+id/numberQuestion"
@@ -41,12 +38,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="60dp"
+        tools:itemCount="4"
+        tools:listitem="@layout/holder_questions_adapter"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/btnAnswerComplete"
         app:layout_constraintTop_toBottomOf="@+id/questionText"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-         />
+        tools:layout_editor_absoluteX="16dp" />
 
     <Button
         android:id="@+id/btnNextQuestion"
@@ -63,11 +62,13 @@
         android:id="@+id/btnAnswerComplete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="@color/cornflower_blue"
+        android:visibility="invisible"
         android:text="выбрать"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.052"
         app:layout_constraintStart_toStartOf="parent" />
 
 

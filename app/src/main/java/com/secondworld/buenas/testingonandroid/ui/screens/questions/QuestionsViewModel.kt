@@ -38,6 +38,11 @@ class QuestionsViewModel @Inject constructor(
     private var _currentAnswers = MutableLiveData<List<AnswerUi>>()
     val currentAnswers: LiveData<List<AnswerUi>> = _currentAnswers
 
+    private var _choiceUser = MutableLiveData<Int>()
+
+    private var _statusChoiceUser = MutableLiveData<Boolean>()
+    val statusChoiceUser : LiveData<Boolean> = _statusChoiceUser
+
     fun saveCurrentTestingSettings(settings: SettingsTesting) {
         _currentTestingSettings.value = settings
     }
@@ -78,10 +83,18 @@ class QuestionsViewModel @Inject constructor(
         _currentAnswers.value = answersUi
     }
 
-    fun updateStatusAnswer(numberElement: Int, newStatus: CheckedStatus) {
+    fun updateStatusAnswer(newStatus: CheckedStatus) {
         _currentAnswers.value = _currentAnswers.value!!.mapIndexed { index, answerUi ->
-            if (index == numberElement) answerUi.copy(checkedStatus = newStatus)
+            if (index == _choiceUser.value) answerUi.copy(checkedStatus = newStatus)
             else answerUi.copy(checkedStatus = CheckedStatus.COMMON)
         }
+    }
+
+    fun currentChoiceUser(numberElement: Int) {
+        _choiceUser.value = numberElement
+    }
+
+    fun checkChoiceUser() {
+        _statusChoiceUser.value = _currentQuestion.value!!.rightAnswer == _choiceUser.value!!.plus(1)
     }
 }
