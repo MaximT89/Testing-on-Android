@@ -3,6 +3,7 @@ package com.secondworld.buenas.testingonandroid.ui.screens.result_screen
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.fragment.findNavController
 import com.secondworld.buenas.testingonandroid.core.bases.BaseFragment
 import com.secondworld.buenas.testingonandroid.core.extension.click
 import com.secondworld.buenas.testingonandroid.core.extension.updateText
@@ -19,7 +20,10 @@ class ResultFragment :
     override fun title(): String = viewModel.title()
 
     override fun initView() {
-        customBackPressed(needCheck = true)
+        binding.btnTest.click {
+            findNavController().navigateUp()
+        }
+
     }
 
     override fun initObservers() {

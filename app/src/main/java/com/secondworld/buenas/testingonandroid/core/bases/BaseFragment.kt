@@ -76,17 +76,11 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
         titleAlert: String = "Предупреждение",
         bodyText: String = "Вы точно хотите закончить тестирование?"
     ) {
-
-        log("Зашел в метод")
-
         requireActivity()
             .onBackPressedDispatcher
             .addCallback(owner!!, object : OnBackPressedCallback(true) {
 
                 override fun handleOnBackPressed() {
-
-                    log("Зашел в метод диспетчера")
-
                     if (needCheck) {
                         alertDialog(
                             positiveBtnLogic = {

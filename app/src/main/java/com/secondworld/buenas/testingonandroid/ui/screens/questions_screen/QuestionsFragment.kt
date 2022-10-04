@@ -5,6 +5,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.fragment.findNavController
 import com.secondworld.buenas.testingonandroid.R
 import com.secondworld.buenas.testingonandroid.core.bases.BaseFragment
 import com.secondworld.buenas.testingonandroid.core.extension.click
@@ -28,7 +29,6 @@ class QuestionsFragment :
     }
 
     override fun initView() = with(binding) {
-
         btnNextQuestion.click {
             viewModel.nextQuestion()
         }
@@ -40,7 +40,7 @@ class QuestionsFragment :
 
         recyclerView.adapter = questionsAdapter
 
-        customBackPressed(needCheck = true, titleAlert = "Новый текст")
+//        customBackPressed(needCheck = true, titleAlert = "Новый текст")
     }
 
     override fun listenerBundleArguments() {
@@ -48,6 +48,8 @@ class QuestionsFragment :
             ifExist = { settings ->
                 log("сработало чтение аргументов")
                 viewModel.saveCurrentTestingSettings(settings)
+            }, notExist = {
+                log("listenerBundleArguments = notExist")
             })
     }
 
@@ -63,10 +65,12 @@ class QuestionsFragment :
                     hideBtnAnswerComplete()
                     questionsAdapter.isClickable = true
                 }
-                is QuestionsState.FinishTesting -> navigateTo(
-                    Destinations.QUESTIONS_TO_RESULT.id,
-                    bundleOf(RIGHT_ANSWERS to state.countRightAnswers)
-                )
+                is QuestionsState.FinishTesting -> {
+                    navigateTo(
+                        Destinations.QUESTIONS_TO_RESULT.id,
+                        bundleOf(RIGHT_ANSWERS to state.countRightAnswers)
+                    )
+                }
             }
         }
 
