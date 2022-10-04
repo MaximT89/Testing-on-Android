@@ -1,10 +1,8 @@
-package com.secondworld.buenas.testingonandroid.ui.screens.questions
+package com.secondworld.buenas.testingonandroid.ui.screens.questions_screen
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
 import com.secondworld.buenas.testingonandroid.R
 import com.secondworld.buenas.testingonandroid.core.extension.click
@@ -30,7 +28,7 @@ class QuestionsAdapter : RecyclerView.Adapter<QuestionsAdapter.ViewHolder>() {
             binding.answerText.text = "${absoluteAdapterPosition + 1}. ${item.answer}"
 
             when (item.checkedStatus) {
-                CheckedStatus.COMMON -> binding.root.setBackgroundResource(R.drawable.bg_holder_question_clean)
+                CheckedStatus.COMMON -> binding.root.setBackgroundResource(0)
                 CheckedStatus.SELECTED -> binding.root.setBackgroundResource(R.drawable.bg_holder_question)
                 CheckedStatus.RIGHT_ANSWER -> binding.root.setBackgroundResource(R.drawable.bg_holder_question_correct_answer)
                 CheckedStatus.WRONG_ANSWER -> binding.root.setBackgroundResource(R.drawable.bg_holder_question_wrong_answer)

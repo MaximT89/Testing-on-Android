@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavOptions
@@ -20,6 +21,7 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.secondworld.buenas.testingonandroid.R
 import com.secondworld.buenas.testingonandroid.core.extension.click
+import com.secondworld.buenas.testingonandroid.core.extension.log
 import com.secondworld.buenas.testingonandroid.core.navigation.BackNavigationUi
 import com.secondworld.buenas.testingonandroid.core.navigation.Navigator
 import com.secondworld.buenas.testingonandroid.databinding.CustomAlertDialogBinding
@@ -35,6 +37,7 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
     protected val binding get() = checkNotNull(_viewBinding)
     protected abstract val viewModel: VM
     protected var toolbar: Toolbar? = null
+    protected var owner : LifecycleOwner? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,13 +51,20 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        owner = initLifecycleOwner()
+
         toolbar = activity?.findViewById(R.id.toolbar)
         toolbar?.title = title()
 
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(showBack())
 
-        toolbar?.setNavigationOnClickListener { requireActivity().onBackPressed() }
+        toolbar?.setNavigationOnClickListener {
+            log("TAG2" , "кликнул кнопку назад")
+
+            findNavController().popBackStack()
+//            requireActivity().onBackPressed()
+        }
 
         initView()
         listenerBundleArguments()
@@ -71,14 +81,16 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
     ) {
         requireActivity()
             .onBackPressedDispatcher
-            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            .addCallback(owner!!, object : OnBackPressedCallback(true) {
+
                 override fun handleOnBackPressed() {
                     if (needCheck) {
                         alertDialog(
                             positiveBtnLogic = {
                                 if (isEnabled) {
                                     isEnabled = false
-                                    requireActivity().onBackPressed()
+                                    findNavController().popBackStack()
+//                                    requireActivity().onBackPressed()
                                     successBack.invoke()
                                 }
                             },
@@ -91,7 +103,8 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
                     } else {
                         if (isEnabled) {
                             isEnabled = false
-                            requireActivity().onBackPressed()
+                            findNavController().popBackStack()
+//                            requireActivity().onBackPressed()
                         }
                     }
                 }
@@ -183,6 +196,8 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
 
     open fun listenerBundleArguments() = Unit
     open fun initCallbacks() = Unit
+
+    abstract fun initLifecycleOwner() : LifecycleOwner
 
     abstract fun initView(): Unit?
     abstract fun initObservers()

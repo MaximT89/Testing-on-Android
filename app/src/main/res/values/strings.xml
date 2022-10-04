@@ -6,4 +6,5 @@
     <string name="title_main">Главная страница</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="result_fragment_title">Результаты теста</string>
 </resources>

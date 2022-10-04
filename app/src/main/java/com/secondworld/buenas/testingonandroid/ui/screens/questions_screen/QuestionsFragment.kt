@@ -1,13 +1,15 @@
-package com.secondworld.buenas.testingonandroid.ui.screens.questions
+package com.secondworld.buenas.testingonandroid.ui.screens.questions_screen
 
-import androidx.annotation.IdRes
+import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import com.secondworld.buenas.testingonandroid.R
 import com.secondworld.buenas.testingonandroid.core.bases.BaseFragment
 import com.secondworld.buenas.testingonandroid.core.extension.click
 import com.secondworld.buenas.testingonandroid.core.extension.log
+import com.secondworld.buenas.testingonandroid.core.navigation.Destinations
 import com.secondworld.buenas.testingonandroid.databinding.FragmentQuestionsBinding
 import com.secondworld.buenas.testingonandroid.domain.main_screen.model.SettingsTesting
 import com.secondworld.buenas.testingonandroid.ui.screens.main_screen.MainFragment
@@ -21,12 +23,14 @@ class QuestionsFragment :
 
     private val questionsAdapter = QuestionsAdapter()
 
+    companion object {
+        const val RIGHT_ANSWERS = "right_answers"
+    }
+
     override fun initView() = with(binding) {
 
         btnNextQuestion.click {
             viewModel.nextQuestion()
-            hideBtnAnswerComplete()
-            questionsAdapter.isClickable = true
         }
 
         btnAnswerComplete.click {
@@ -53,6 +57,20 @@ class QuestionsFragment :
 
         currentNumberQuestion.observe { updateQuestionNumberInfo() }
 
+        questionsState.observe { state ->
+
+            when (state) {
+                QuestionsState.NewQuestion -> {
+                    hideBtnAnswerComplete()
+                    questionsAdapter.isClickable = true
+                }
+                is QuestionsState.FinishTesting -> navigateTo(
+                    Destinations.QUESTIONS_TO_RESULT.id,
+                    bundleOf(RIGHT_ANSWERS to state.countRightAnswers)
+                )
+            }
+        }
+
         currentQuestion.observe { question ->
             updateQuestionText(question.question)
             getCurrentAnswers(question.answers)
@@ -65,9 +83,11 @@ class QuestionsFragment :
             viewModel.fetchQuestionsFromRepo()
         }
 
-        statusChoiceUser.observe {
-            if (it) viewModel.updateStatusAnswer(CheckedStatus.RIGHT_ANSWER)
-            else viewModel.updateStatusAnswer(CheckedStatus.WRONG_ANSWER)
+        statusChoiceUser.observe { statusAnswer ->
+            if (statusAnswer) {
+                viewModel.updateStatusAnswer(CheckedStatus.RIGHT_ANSWER)
+                viewModel.incCountRightAnswers()
+            } else viewModel.updateStatusAnswer(CheckedStatus.WRONG_ANSWER)
         }
 
         currentListQuestions.observe {
@@ -83,7 +103,7 @@ class QuestionsFragment :
 
     private fun updateTimerText(second: Long) {
         binding.timer.text = second.toString()
-        if(second <= 10) binding.timer.setTextColor(resources.getColor(R.color.crimson))
+        if (second <= 10) binding.timer.setTextColor(resources.getColor(R.color.crimson))
         else binding.timer.setTextColor(resources.getColor(R.color.Black))
     }
 
@@ -116,4 +136,5 @@ class QuestionsFragment :
     }
 
     override fun title() = viewModel.title()
+    override fun initLifecycleOwner(): LifecycleOwner = viewLifecycleOwner
 }

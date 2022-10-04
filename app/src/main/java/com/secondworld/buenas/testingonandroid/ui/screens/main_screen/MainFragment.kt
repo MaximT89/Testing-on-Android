@@ -3,6 +3,7 @@ package com.secondworld.buenas.testingonandroid.ui.screens.main_screen
 import android.widget.RadioButton
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import com.secondworld.buenas.testingonandroid.R
 import com.secondworld.buenas.testingonandroid.core.bases.BaseFragment
 import com.secondworld.buenas.testingonandroid.core.extension.click
@@ -74,4 +75,5 @@ class MainFragment :
     override fun showBack(): Boolean = false
     override fun title() = viewModel.title()
     override fun initObservers() = Unit
+    override fun initLifecycleOwner(): LifecycleOwner = viewLifecycleOwner
 }

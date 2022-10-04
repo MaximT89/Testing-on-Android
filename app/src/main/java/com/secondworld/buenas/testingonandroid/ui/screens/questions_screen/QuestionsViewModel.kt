@@ -1,4 +1,4 @@
-package com.secondworld.buenas.testingonandroid.ui.screens.questions
+package com.secondworld.buenas.testingonandroid.ui.screens.questions_screen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -45,6 +45,13 @@ class QuestionsViewModel @Inject constructor(
     private var _currentTimerSecond = MutableLiveData<Long>()
     val currentTimerSecond: LiveData<Long> = _currentTimerSecond
 
+    private var _questionsState = MutableLiveData<QuestionsState>()
+    val questionsState: LiveData<QuestionsState> = _questionsState
+
+    // TODO: данную переменную нужно будет модифицировать когда вопросы будут разбиты по темам
+    private var _currentRightAnswers = MutableLiveData(0)
+    val currentRightAnswers: LiveData<Int> = _currentRightAnswers
+
     var timer: Timer? = Timer()
 
     fun saveCurrentTestingSettings(settings: SettingsTesting) {
@@ -69,13 +76,12 @@ class QuestionsViewModel @Inject constructor(
 
         if (newQuestionNumber <= _currentTestingSettings.value!!.countQuestions.countQuestions) {
             _currentNumberQuestion.value = newQuestionNumber
+            _questionsState.value = QuestionsState.NewQuestion
 
             updateCurrentQuestion()
             startTimer()
-
         } else {
-            // TODO: в таком случае нужно переводить на результаты теста
-            // TODO: сохранить результаты в объект и переводить на страницу с результатами
+            _questionsState.value = QuestionsState.FinishTesting(_currentRightAnswers.value!!)
         }
     }
 
@@ -89,6 +95,10 @@ class QuestionsViewModel @Inject constructor(
             timer?.startTimer(
                 onTick = {
                     _currentTimerSecond.value = it
+                },
+                onFinish = {
+                    nextQuestion()
+
                 })
         }
     }
@@ -118,4 +128,13 @@ class QuestionsViewModel @Inject constructor(
         _statusChoiceUser.value =
             _currentQuestion.value!!.rightAnswer == _choiceUser.value!!.plus(1)
     }
+
+    fun incCountRightAnswers() {
+        _currentRightAnswers.value = _currentRightAnswers.value!!.plus(1)
+    }
+}
+
+sealed class QuestionsState {
+    object NewQuestion : QuestionsState()
+    class FinishTesting(val countRightAnswers: Int) : QuestionsState()
 }

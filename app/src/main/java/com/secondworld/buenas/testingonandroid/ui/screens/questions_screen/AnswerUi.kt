@@ -1,4 +1,4 @@
-package com.secondworld.buenas.testingonandroid.ui.screens.questions
+package com.secondworld.buenas.testingonandroid.ui.screens.questions_screen
 
 data class AnswerUi(
     val answer: String,
