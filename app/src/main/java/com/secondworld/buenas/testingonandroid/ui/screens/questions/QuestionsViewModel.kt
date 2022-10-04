@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.secondworld.buenas.testingonandroid.R
 import com.secondworld.buenas.testingonandroid.core.bases.BaseViewModel
 import com.secondworld.buenas.testingonandroid.core.common.ResourceProvider
+import com.secondworld.buenas.testingonandroid.core.common.Timer
 import com.secondworld.buenas.testingonandroid.data.testing_screen.local.data_storage.models.Question
 import com.secondworld.buenas.testingonandroid.domain.main_screen.model.SettingsTesting
 import com.secondworld.buenas.testingonandroid.domain.testing_screen.repository.TestingRepository
@@ -39,7 +40,12 @@ class QuestionsViewModel @Inject constructor(
     private var _choiceUser = MutableLiveData<Int>()
 
     private var _statusChoiceUser = MutableLiveData<Boolean>()
-    val statusChoiceUser : LiveData<Boolean> = _statusChoiceUser
+    val statusChoiceUser: LiveData<Boolean> = _statusChoiceUser
+
+    private var _currentTimerSecond = MutableLiveData<Long>()
+    val currentTimerSecond: LiveData<Long> = _currentTimerSecond
+
+    var timer: Timer? = Timer()
 
     fun saveCurrentTestingSettings(settings: SettingsTesting) {
         _currentTestingSettings.value = settings
@@ -65,9 +71,25 @@ class QuestionsViewModel @Inject constructor(
             _currentNumberQuestion.value = newQuestionNumber
 
             updateCurrentQuestion()
+            startTimer()
+
         } else {
             // TODO: в таком случае нужно переводить на результаты теста
             // TODO: сохранить результаты в объект и переводить на страницу с результатами
+        }
+    }
+
+    fun startTimer() {
+        if (timer != null) {
+            timer?.stopTimer()
+            timer = null
+            timer = Timer(
+                fullTime = _currentTestingSettings.value!!.questionsType.timeForAnswer.toLong()
+            )
+            timer?.startTimer(
+                onTick = {
+                    _currentTimerSecond.value = it
+                })
         }
     }
 
@@ -93,6 +115,7 @@ class QuestionsViewModel @Inject constructor(
     }
 
     fun checkChoiceUser() {
-        _statusChoiceUser.value = _currentQuestion.value!!.rightAnswer == _choiceUser.value!!.plus(1)
+        _statusChoiceUser.value =
+            _currentQuestion.value!!.rightAnswer == _choiceUser.value!!.plus(1)
     }
 }

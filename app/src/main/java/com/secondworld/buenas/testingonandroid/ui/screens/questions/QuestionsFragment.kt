@@ -1,8 +1,10 @@
 package com.secondworld.buenas.testingonandroid.ui.screens.questions
 
+import androidx.annotation.IdRes
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import com.secondworld.buenas.testingonandroid.R
 import com.secondworld.buenas.testingonandroid.core.bases.BaseFragment
 import com.secondworld.buenas.testingonandroid.core.extension.click
 import com.secondworld.buenas.testingonandroid.core.extension.log
@@ -68,7 +70,21 @@ class QuestionsFragment :
             else viewModel.updateStatusAnswer(CheckedStatus.WRONG_ANSWER)
         }
 
-        currentListQuestions.observe { viewModel.updateCurrentQuestion() }
+        currentListQuestions.observe {
+            viewModel.updateCurrentQuestion()
+            viewModel.startTimer()
+        }
+
+        currentTimerSecond.observe { second ->
+            updateTimerText(second)
+
+        }
+    }
+
+    private fun updateTimerText(second: Long) {
+        binding.timer.text = second.toString()
+        if(second <= 10) binding.timer.setTextColor(resources.getColor(R.color.crimson))
+        else binding.timer.setTextColor(resources.getColor(R.color.Black))
     }
 
     private fun getCurrentAnswers(answers: List<String>) {
