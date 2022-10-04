@@ -34,14 +34,13 @@ class QuestionsFragment :
         }
 
         btnAnswerComplete.click {
-            // TODO: нужно сделать логику увеличения счета
             viewModel.checkChoiceUser()
             questionsAdapter.isClickable = false
         }
 
         recyclerView.adapter = questionsAdapter
 
-        customBackPressed(needCheck = true)
+        customBackPressed(needCheck = true, titleAlert = "Новый текст")
     }
 
     override fun listenerBundleArguments() {
@@ -136,5 +135,5 @@ class QuestionsFragment :
     }
 
     override fun title() = viewModel.title()
-    override fun initLifecycleOwner(): LifecycleOwner = viewLifecycleOwner
+    override fun initLifecycleOwner(): LifecycleOwner = this@QuestionsFragment
 }

@@ -60,10 +60,7 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(showBack())
 
         toolbar?.setNavigationOnClickListener {
-            log("TAG2" , "кликнул кнопку назад")
-
-            findNavController().popBackStack()
-//            requireActivity().onBackPressed()
+            requireActivity().onBackPressed()
         }
 
         initView()
@@ -79,18 +76,23 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
         titleAlert: String = "Предупреждение",
         bodyText: String = "Вы точно хотите закончить тестирование?"
     ) {
+
+        log("Зашел в метод")
+
         requireActivity()
             .onBackPressedDispatcher
             .addCallback(owner!!, object : OnBackPressedCallback(true) {
 
                 override fun handleOnBackPressed() {
+
+                    log("Зашел в метод диспетчера")
+
                     if (needCheck) {
                         alertDialog(
                             positiveBtnLogic = {
                                 if (isEnabled) {
                                     isEnabled = false
-                                    findNavController().popBackStack()
-//                                    requireActivity().onBackPressed()
+                                    requireActivity().onBackPressed()
                                     successBack.invoke()
                                 }
                             },
@@ -103,8 +105,7 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
                     } else {
                         if (isEnabled) {
                             isEnabled = false
-                            findNavController().popBackStack()
-//                            requireActivity().onBackPressed()
+                            requireActivity().onBackPressed()
                         }
                     }
                 }

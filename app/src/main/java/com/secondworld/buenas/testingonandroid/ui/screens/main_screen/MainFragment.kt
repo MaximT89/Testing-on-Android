@@ -75,5 +75,5 @@ class MainFragment :
     override fun showBack(): Boolean = false
     override fun title() = viewModel.title()
     override fun initObservers() = Unit
-    override fun initLifecycleOwner(): LifecycleOwner = viewLifecycleOwner
+    override fun initLifecycleOwner(): LifecycleOwner = this@MainFragment
 }

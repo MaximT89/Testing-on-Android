@@ -18,7 +18,7 @@ class ResultFragment :
 
     override fun title(): String = viewModel.title()
 
-    override fun initView() = with(binding){
+    override fun initView() {
         customBackPressed(needCheck = true)
     }
 
@@ -28,7 +28,7 @@ class ResultFragment :
     override fun listenerBundleArguments() {
 
         readArguments<Int>(QuestionsFragment.RIGHT_ANSWERS,
-            ifExist = {  countRightQuestions -> updateUi(countRightQuestions) })
+            ifExist = { countRightQuestions -> updateUi(countRightQuestions) })
     }
 
 
@@ -36,5 +36,5 @@ class ResultFragment :
         binding.countRightQuestions.text = countRightQuestions.toString()
     }
 
-    override fun initLifecycleOwner(): LifecycleOwner = viewLifecycleOwner
+    override fun initLifecycleOwner(): LifecycleOwner = this@ResultFragment
 }
