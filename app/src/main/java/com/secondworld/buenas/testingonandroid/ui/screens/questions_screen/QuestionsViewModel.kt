@@ -138,6 +138,7 @@ class QuestionsViewModel @Inject constructor(
 
     fun updateResultCurrentTesting(size: Int) {
         _resultCurrentTesting.value!!.countQuestions = size
+        _resultCurrentTesting.value!!.questionsType = _currentTestingSettings.value!!.questionsType
     }
 }
 

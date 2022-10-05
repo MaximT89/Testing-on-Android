@@ -24,25 +24,34 @@ class ResultFragment :
         btnReturnToMain.click { navigateTo(Destinations.RESULT_TO_MAIN.id) }
     }
 
-    override fun initObservers() {
+    override fun initObservers() = with(viewModel){
+
+        resultUiState.observe{ state ->
+            when(state){
+                is ResultUiState.UpdateUi -> {
+                    updateResultText(state.result)
+                    updateTextColor(state.textResultColor)
+                    updateConclusionText(state.conclusionText)
+                }
+            }
+        }
+    }
+
+    private fun updateConclusionText(conclusionText: String) {
+        binding.conclusionText.text = conclusionText
     }
 
     override fun listenerBundleArguments() {
-
         readArguments<ResultCurrentTesting>(QuestionsFragment.RESULT_CURRENT_TESTING,
-            ifExist = { countRightQuestions -> updateUi(countRightQuestions) })
+            ifExist = { resultCurrentTesting -> viewModel.updateResultCurrentTesting(resultCurrentTesting) })
     }
 
-    private fun updateUi(result: ResultCurrentTesting) {
-        updateTextColor(result)
-        binding.countRightQuestions.text = "${result.rightAnswers} из ${result.countQuestions}"
+    private fun updateResultText(result: ResultCurrentTesting) = with(binding){
+        countRightQuestions.text = "${result.rightAnswers} из ${result.countQuestions}"
     }
 
-    private fun updateTextColor(result: ResultCurrentTesting) = with(binding){
-        when(result.rightAnswers.toDouble() / (result.countQuestions.toDouble() / 100)){
-            in 0.00..29.99 -> countRightQuestions.setTextColor(resources.getColor(R.color.Red))
-            in 30.00..69.99 -> countRightQuestions.setTextColor(resources.getColor(R.color.chocolate))
-            in 70.00..100.00 -> countRightQuestions.setTextColor(resources.getColor(R.color.Green))
-        }
+    private fun updateTextColor(textColor : Int) = with(binding){
+        countRightQuestions.setTextColor(resources.getColor(textColor))
     }
 }
+
