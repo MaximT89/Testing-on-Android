@@ -15,7 +15,7 @@
         android:gravity="center"
         android:padding="5dp"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Предупреждение" />
@@ -26,7 +26,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingHorizontal="15dp"
-        android:paddingVertical="20dp"
+        android:paddingVertical="30dp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintTop_toBottomOf="@id/title"
         tools:text="Вы точно хотите закончить тестирование?" />
@@ -35,7 +36,6 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -46,7 +46,9 @@
             android:layout_weight="1"
             android:gravity="center"
             android:paddingVertical="5dp"
-            android:text="@string/yes" />
+            android:textStyle="bold"
+            android:text="@string/yes"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/btnNegative"
@@ -54,9 +56,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:textStyle="bold"
             android:gravity="center"
             android:paddingVertical="5dp"
-            android:text="@string/no" />
+            android:text="@string/no"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

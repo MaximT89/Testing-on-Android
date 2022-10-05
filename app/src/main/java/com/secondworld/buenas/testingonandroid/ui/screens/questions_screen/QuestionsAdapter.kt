@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.secondworld.buenas.testingonandroid.R
 import com.secondworld.buenas.testingonandroid.core.extension.click
 import com.secondworld.buenas.testingonandroid.databinding.HolderQuestionsAdapterBinding
+import com.secondworld.buenas.testingonandroid.ui.screens.questions_screen.modelUi.AnswerUi
+import com.secondworld.buenas.testingonandroid.ui.screens.questions_screen.modelUi.CheckedStatus
 
 @SuppressLint("NotifyDataSetChanged,SetTextI18n")
 class QuestionsAdapter : RecyclerView.Adapter<QuestionsAdapter.ViewHolder>() {

@@ -9,6 +9,9 @@ import com.secondworld.buenas.testingonandroid.core.common.Timer
 import com.secondworld.buenas.testingonandroid.data.testing_screen.local.data_storage.models.Question
 import com.secondworld.buenas.testingonandroid.domain.main_screen.model.SettingsTesting
 import com.secondworld.buenas.testingonandroid.domain.testing_screen.repository.TestingRepository
+import com.secondworld.buenas.testingonandroid.ui.screens.questions_screen.modelUi.AnswerUi
+import com.secondworld.buenas.testingonandroid.ui.screens.questions_screen.modelUi.CheckedStatus
+import com.secondworld.buenas.testingonandroid.ui.screens.questions_screen.modelUi.ResultCurrentTesting
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -49,8 +52,8 @@ class QuestionsViewModel @Inject constructor(
     val questionsState: LiveData<QuestionsState> = _questionsState
 
     // TODO: данную переменную нужно будет модифицировать когда вопросы будут разбиты по темам
-    private var _currentRightAnswers = MutableLiveData(0)
-    val currentRightAnswers: LiveData<Int> = _currentRightAnswers
+    private var _resultCurrentTesting = MutableLiveData<ResultCurrentTesting>(ResultCurrentTesting())
+    val resultCurrentTesting: LiveData<ResultCurrentTesting> = _resultCurrentTesting
 
     var timer: Timer? = Timer()
 
@@ -81,7 +84,7 @@ class QuestionsViewModel @Inject constructor(
             updateCurrentQuestion()
             startTimer()
         } else {
-            _questionsState.value = QuestionsState.FinishTesting(_currentRightAnswers.value!!)
+            _questionsState.value = QuestionsState.FinishTesting(_resultCurrentTesting.value!!)
         }
     }
 
@@ -130,11 +133,15 @@ class QuestionsViewModel @Inject constructor(
     }
 
     fun incCountRightAnswers() {
-        _currentRightAnswers.value = _currentRightAnswers.value!!.plus(1)
+        _resultCurrentTesting.value!!.rightAnswers = _resultCurrentTesting.value!!.rightAnswers + 1
+    }
+
+    fun updateResultCurrentTesting(size: Int) {
+        _resultCurrentTesting.value!!.countQuestions = size
     }
 }
 
 sealed class QuestionsState {
     object NewQuestion : QuestionsState()
-    class FinishTesting(val countRightAnswers: Int) : QuestionsState()
+    class FinishTesting(val resultCurrentTesting: ResultCurrentTesting) : QuestionsState()
 }

@@ -37,7 +37,6 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
     protected val binding get() = checkNotNull(_viewBinding)
     protected abstract val viewModel: VM
     protected var toolbar: Toolbar? = null
-    protected var owner : LifecycleOwner? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,8 +49,6 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        owner = initLifecycleOwner()
 
         toolbar = activity?.findViewById(R.id.toolbar)
         toolbar?.title = title()
@@ -78,7 +75,7 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
     ) {
         requireActivity()
             .onBackPressedDispatcher
-            .addCallback(owner!!, object : OnBackPressedCallback(true) {
+            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
 
                 override fun handleOnBackPressed() {
                     if (needCheck) {
@@ -191,8 +188,6 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
 
     open fun listenerBundleArguments() = Unit
     open fun initCallbacks() = Unit
-
-    abstract fun initLifecycleOwner() : LifecycleOwner
 
     abstract fun initView(): Unit?
     abstract fun initObservers()
