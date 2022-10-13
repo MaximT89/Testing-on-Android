@@ -1,6 +1,7 @@
 package com.secondworld.buenas.testingonandroid.ui.screens.main_screen
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.secondworld.buenas.testingonandroid.R
 import com.secondworld.buenas.testingonandroid.core.bases.BaseViewModel
 import com.secondworld.buenas.testingonandroid.core.common.ResourceProvider
@@ -10,6 +11,8 @@ import com.secondworld.buenas.testingonandroid.domain.main_screen.interactor.Mai
 import com.secondworld.buenas.testingonandroid.domain.main_screen.model.SettingsTesting
 import com.secondworld.buenas.testingonandroid.domain.main_screen.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
